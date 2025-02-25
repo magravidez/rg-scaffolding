@@ -5,6 +5,6 @@ This e-commerce website was developed for RG Scaffolding, a company specializing
 Visit the website here: https://example.com
 ## Developers
 
-- Ballesteros, Rhundei Zen ([@username](https://www.github.com/))
+- Ballesteros, Rhundei Zen ([@rhndzvs](https://github.com/rhndzvs))
 - Gravidez, Mariel ([@magravidez](https://github.com/magravidez))
-- Tengco, Rylie Julian ([@username](https://www.github.com/username))
+- Tengco, Julian Rylie ([@Rylie-Tengco](https://github.com/Rylie-Tengco))

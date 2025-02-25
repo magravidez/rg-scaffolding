@@ -130,8 +130,18 @@ function validateCheckoutForm() {
 }
 
 // Generate order ID
+let orderCounter = 1;
+
 function generateOrderId() {
-    return 'ORD' + Date.now() + Math.random().toString(36).substr(2, 5);
+  const date = new Date();
+
+  const formattedDate = date.toISOString().slice(0, 10).replace(/-/g, '');
+
+  const sequence = String(orderCounter).padStart(4, '0');
+
+  orderCounter++;
+
+  return `${formattedDate}-${sequence}`;
 }
 
 // Handle place order
@@ -210,4 +220,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-}); 
+});
