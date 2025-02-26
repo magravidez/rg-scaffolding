@@ -19,27 +19,59 @@ if (!checkAuth()) {
 const products = [
     {
         id: 1,
-        name: 'Sample Product 1',
-        price: 99.99,
-        image: 'images/product1.jpg',
-        description: 'High-quality product with amazing features.',
-        type: 'sale'
+        name: 'Adjustable Base Jack',
+        price: 60.00,
+        image: 'images/Adjustable-Base-Jack.jpg',
+        description: 'Provides height adjustment and stability for scaffolding structures.',
+        type: 'rent'
     },
     {
         id: 2,
-        name: 'Sample Product 2',
-        price: 149.99,
-        image: 'images/product1.jpg',
-        description: 'Premium product for your needs.',
+        name: 'Catwalk',
+        price: 200.00,
+        image: 'images/Scaffolding-Catwalk.jpg',
+        description: 'A sturdy walkway for safe movement on scaffolding.',
         type: 'rent'
     },
     {
         id: 3,
-        name: 'Sample Product 3',
-        price: 79.99,
-        image: 'images/product1.jpg',
-        description: 'Affordable and reliable product.',
-        type: 'sale'
+        name: 'Adjustable U-Head',
+        price: 60.00,
+        image: 'images/Adjustable-U-Head.png',
+        description: 'Supports beams with adjustable height for precise leveling.',
+        type: 'rent'
+    },
+    {
+        id: 4,
+        name: 'Swivel Clamp',
+        price: 20.00,
+        image: 'images/Swivel-Clamp.jpg',
+        description: 'Connects scaffold tubes at various angles for flexibility.',
+        type: 'rent'
+    },
+    {
+        id: 5,
+        name: 'Ladder',
+        price: 300.00,
+        image: 'images/Ladder.jpg',
+        description: 'Ensures safe access to different scaffold levels.',
+        type: 'rent'
+    },
+    {
+        id: 6,
+        name: 'Caster Wheel',
+        price: 100.00,
+        image: 'images/Caster-Wheel.jpg',
+        description: 'Adds mobility to scaffolding for easy repositioning.',
+        type: 'rent'
+    },
+    {
+        id: 7,
+        name: 'Shoring Jack',
+        price: 200.00,
+        image: 'images/Shoring-Jack.jpg',
+        description: 'Supports heavy loads in construction and formwork.',
+        type: 'rent'
     }
 ];
 
