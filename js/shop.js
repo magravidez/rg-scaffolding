@@ -71,7 +71,7 @@ const products = [
         price: 200.00,
         image: 'images/Shoring-Jack.jpg',
         description: 'Supports heavy loads in construction and formwork.',
-        type: 'rent'
+        type: 'sale'
     }
 ];
 
