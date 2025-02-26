@@ -3,6 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    scroll-behavior: smooth;
 }
 
 body {
@@ -738,4 +739,16 @@ footer {
 
 .social-link:hover #carousell-logo {
     content: url('../images/landing_page/carousell-logo-hover.png');
+}
+
+/* Best Sellers Section */
+.product-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.product-card img {
+    width: 65%;
 }

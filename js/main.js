@@ -73,28 +73,28 @@ async function loadProductGallery(container) {
         const products = [
             {
                 id: 1,
-                name: 'Product 1',
-                price: 99.99,
-                image: 'images/product1.jpg',
-                description: 'Product description goes here...',
-                type: 'sale/rent'
+                name: 'Adjustable Base Jack',
+                price: 60.00,
+                image: 'images/Adjustable-Base-Jack.jpg',
+                description: 'Provides height adjustment and stability for scaffolding structures.',
+                type: 'Rent'
             },
             // Add more products...
             {
                 id: 2,
-                name: 'Product 2',
-                price: 99.99,
-                image: 'images/product2.jpg',
-                description: 'Product description goes here...',
-                type: 'sale/rent'
+                name: 'Catwalk',
+                price: 200.00,
+                image: 'images/Scaffolding-Catwalk.jpg',
+                description: 'A sturdy walkway for safe movement on scaffolding.',
+                type: 'Rent'
             },
             {
                 id: 3,
-                name: 'Product 3',
-                price: 99.99,
-                image: 'images/product3.jpg',
-                description: 'Product description goes here...',
-                type: 'sale/rent'
+                name: 'Adjustable U-Head',
+                price: 60.00,
+                image: 'images/Adjustable-U-Head.png',
+                description: 'Supports beams with adjustable height for precise leveling.',
+                type: 'Rent'
             },
         ];
 
