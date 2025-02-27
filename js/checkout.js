@@ -67,11 +67,9 @@ function renderOrderItems() {
 // Update order summary
 function updateOrderSummary() {
     const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const shipping = 10; // Fixed shipping cost
-    const total = subtotal + shipping;
+    const total = subtotal;
 
     document.querySelector('.subtotal').textContent = formatCurrency(subtotal);
-    document.querySelector('.shipping').textContent = formatCurrency(shipping);
     document.querySelector('.total-amount').textContent = formatCurrency(total);
 }
 
@@ -167,7 +165,7 @@ async function handlePlaceOrder(event) {
         payment: document.querySelector('input[name="payment"]:checked').value,
         status: 'processing',
         date: new Date().toISOString(),
-        total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) + 10
+        total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
     };
 
     try {

@@ -22,6 +22,7 @@ function renderCart() {
     const cartContent = document.querySelector('.cart-content');
 
     if (!cart || cart.length === 0) {
+        cartContent.classList.add('empty');
         cartContent.innerHTML = `
             <div class="empty-cart">
                 <i class="fas fa-shopping-cart"></i>
@@ -30,6 +31,8 @@ function renderCart() {
             </div>
         `;
         return;
+    } else {
+        cartContent.classList.remove('empty');
     }
 
     cartItems.innerHTML = cart.map(item => `
@@ -37,16 +40,18 @@ function renderCart() {
             <img src="${item.image}" alt="${item.name}">
             <div class="item-details">
                 <h3>${item.name}</h3>
+                <!-- New purchase type indicator -->
+                <p class="purchase-type">${item.purchaseType === 'rent' ? 'For Rent' : 'For Sale'}</p>
                 <p class="price">${formatCurrency(item.price)}</p>
                 <div class="quantity-controls">
-                    <button class="quantity-btn minus" data-product-id="${item.id}">-</button>
-                    <input type="number" value="${item.quantity}" min="1" class="quantity-input" data-product-id="${item.id}">
-                    <button class="quantity-btn plus" data-product-id="${item.id}">+</button>
-                </div>
+    <button class="quantity-btn minus" data-product-id="${item.id}" data-purchase-type="${item.purchaseType}">-</button>
+    <input type="number" value="${item.quantity}" min="1" class="quantity-input" data-product-id="${item.id}" data-purchase-type="${item.purchaseType}">
+    <button class="quantity-btn plus" data-product-id="${item.id}" data-purchase-type="${item.purchaseType}">+</button>
+</div>
             </div>
-            <button class="remove-item" data-product-id="${item.id}">
-                <i class="fas fa-trash"></i>
-            </button>
+            <button class="remove-item" data-product-id="${item.id}" data-purchase-type="${item.purchaseType}">
+    <i class="fas fa-trash"></i>
+</button>
         </div>
     `).join('');
 
@@ -57,11 +62,9 @@ function renderCart() {
 // Update cart summary
 function updateCartSummary() {
     const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const shipping = subtotal > 0 ? 10 : 0; // Example shipping cost
-    const total = subtotal + shipping;
+    const total = subtotal;
 
     document.querySelector('.subtotal').textContent = formatCurrency(subtotal);
-    document.querySelector('.shipping').textContent = formatCurrency(shipping);
     document.querySelector('.total-amount').textContent = formatCurrency(total);
 
     // Update checkout button state
@@ -77,7 +80,8 @@ function addCartEventListeners() {
     document.querySelectorAll('.quantity-btn.minus').forEach(button => {
         button.addEventListener('click', () => {
             const productId = parseInt(button.dataset.productId);
-            updateQuantity(productId, 'decrease');
+            const purchaseType = button.dataset.purchaseType;
+            updateQuantity(productId, 'decrease', null, purchaseType);
         });
     });
 
@@ -85,7 +89,8 @@ function addCartEventListeners() {
     document.querySelectorAll('.quantity-btn.plus').forEach(button => {
         button.addEventListener('click', () => {
             const productId = parseInt(button.dataset.productId);
-            updateQuantity(productId, 'increase');
+            const purchaseType = button.dataset.purchaseType;
+            updateQuantity(productId, 'increase', null, purchaseType);
         });
     });
 
@@ -93,9 +98,10 @@ function addCartEventListeners() {
     document.querySelectorAll('.quantity-input').forEach(input => {
         input.addEventListener('change', (e) => {
             const productId = parseInt(input.dataset.productId);
+            const purchaseType = input.dataset.purchaseType;
             const newQuantity = parseInt(e.target.value);
             if (newQuantity > 0) {
-                updateQuantity(productId, 'set', newQuantity);
+                updateQuantity(productId, 'set', newQuantity, purchaseType);
             } else {
                 loadCart(); // Reset to previous value
             }
@@ -106,14 +112,15 @@ function addCartEventListeners() {
     document.querySelectorAll('.remove-item').forEach(button => {
         button.addEventListener('click', () => {
             const productId = parseInt(button.dataset.productId);
-            removeFromCart(productId);
+            const purchaseType = button.dataset.purchaseType;
+            removeFromCart(productId, purchaseType);
         });
     });
 }
 
 // Update item quantity
-function updateQuantity(productId, action, value = null) {
-    const itemIndex = cart.findIndex(item => item.id === productId);
+function updateQuantity(productId, action, value = null, purchaseType) {
+    const itemIndex = cart.findIndex(item => item.id === productId && item.purchaseType === purchaseType);
     if (itemIndex === -1) return;
 
     switch (action) {
@@ -137,8 +144,8 @@ function updateQuantity(productId, action, value = null) {
 }
 
 // Remove item from cart
-function removeFromCart(productId) {
-    cart = cart.filter(item => item.id !== productId);
+function removeFromCart(productId, purchaseType) {
+    cart = cart.filter(item => !(item.id === productId && item.purchaseType === purchaseType));
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
     renderCart();
