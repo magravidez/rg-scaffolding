@@ -28,7 +28,7 @@ function initializeDashboard() {
         // Load orders
         orders = JSON.parse(localStorage.getItem('orders') || '[]')
             .sort((a, b) => new Date(b.date) - new Date(a.date));
-        
+
         updateDashboardStats();
         renderOrders();
     } catch (error) {
@@ -39,10 +39,10 @@ function initializeDashboard() {
 // Update dashboard statistics
 function updateDashboardStats() {
     const totalOrders = orders.length;
-    const pendingOrders = orders.filter(order => 
+    const pendingOrders = orders.filter(order =>
         order.status === 'processing' || order.status === 'out-for-delivery'
     ).length;
-    const completedOrders = orders.filter(order => 
+    const completedOrders = orders.filter(order =>
         order.status === 'completed'
     ).length;
 
@@ -53,8 +53,8 @@ function updateDashboardStats() {
 
 // Filter orders by status
 function filterOrders(status) {
-    const filteredOrders = status === 'all' 
-        ? orders 
+    const filteredOrders = status === 'all'
+        ? orders
         : orders.filter(order => order.status === status);
     renderOrders(filteredOrders);
 }
@@ -67,7 +67,7 @@ function searchOrders() {
         return;
     }
 
-    const filteredOrders = orders.filter(order => 
+    const filteredOrders = orders.filter(order =>
         order.id.toLowerCase().includes(searchTerm) ||
         order.customer.name.toLowerCase().includes(searchTerm) ||
         order.customer.email.toLowerCase().includes(searchTerm)
@@ -78,7 +78,7 @@ function searchOrders() {
 // Render orders
 function renderOrders(ordersToRender = orders) {
     const ordersList = document.getElementById('ordersList');
-    
+
     if (!ordersToRender || ordersToRender.length === 0) {
         ordersList.innerHTML = `
             <div class="no-orders">
@@ -122,13 +122,16 @@ function renderOrders(ordersToRender = orders) {
                 <h4>Total Cost: ${formatCurrency(order.total)}</h4>
             </div>
             <div class="action-buttons">
-                <button class="action-btn view-btn" onclick="viewOrderDetails('${order.id}')">
-                    <i class="fas fa-eye"></i> View Details
-                </button>
-                <button class="action-btn print-btn" onclick="printOrder('${order.id}')">
-                    <i class="fas fa-print"></i> Print Order
-                </button>
-            </div>
+    <button class="action-btn view-btn" onclick="viewOrderDetails('${order.id}')">
+        <i class="fas fa-eye"></i> View Details
+    </button>
+    <button class="action-btn print-btn" onclick="printOrder('${order.id}')">
+        <i class="fas fa-print"></i> Print Order
+    </button>
+    <button class="action-btn delete-btn" onclick="deleteOrder('${order.id}')">
+        <i class="fas fa-trash"></i> Delete Order
+    </button>
+</div>
         </div>
     `).join('');
 }
@@ -141,7 +144,7 @@ async function updateOrderStatus(orderId, newStatus) {
 
         orders[orderIndex].status = newStatus;
         localStorage.setItem('orders', JSON.stringify(orders));
-        
+
         updateDashboardStats();
         showNotification('Order status updated successfully');
     } catch (error) {
@@ -187,12 +190,9 @@ function viewOrderDetails(orderId) {
         <div class="order-summary">
             <div class="summary-item">
                 <span>Subtotal</span>
-                <span>${formatCurrency(order.total - 10)}</span>
+                <span>${formatCurrency(order.total)}</span>
             </div>
-            <div class="summary-item">
-                <span>Shipping</span>
-                <span>${formatCurrency(10)}</span>
-            </div>
+        
             <div class="summary-item total">
                 <span>Total</span>
                 <span>${formatCurrency(order.total)}</span>
@@ -250,8 +250,7 @@ function printOrder(orderId) {
             
             <div class="order-summary">
                 <h3>Order Summary</h3>
-                <p><strong>Subtotal:</strong> ${formatCurrency(order.total - 10)}</p>
-                <p><strong>Shipping:</strong> ${formatCurrency(10)}</p>
+                <p><strong>Subtotal:</strong> ${formatCurrency(order.total)}</p>
                 <p><strong>Total:</strong> ${formatCurrency(order.total)}</p>
             </div>
         </div>
@@ -285,6 +284,17 @@ function printOrder(orderId) {
             </body>
         </html>
     `);
+}
+
+function deleteOrder(orderId) {
+    if (!confirm('Are you sure you want to delete this order?')) return;
+
+    orders = orders.filter(order => order.id !== orderId);
+    localStorage.setItem('orders', JSON.stringify(orders));
+
+    updateDashboardStats();
+    renderOrders();
+    showNotification('Order deleted successfully');
 }
 
 // Initialize
@@ -333,4 +343,4 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = 'owner-login.html';
         });
     }
-}); 
+});

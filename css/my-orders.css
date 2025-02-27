@@ -173,6 +173,8 @@
     border-radius: 8px;
     max-width: 600px;
     position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .close-modal {

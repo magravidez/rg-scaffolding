@@ -15,6 +15,14 @@
     gap: 2rem;
 }
 
+.cart-content.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+}
+
 /* Cart Items */
 .cart-items {
     background-color: #fff;
@@ -177,6 +185,7 @@
     text-decoration: none;
     border-radius: 4px;
     transition: background-color 0.3s ease;
+    margin: 0 auto;
 }
 
 .continue-shopping:hover {
@@ -219,4 +228,12 @@
     .quantity-controls {
         flex-wrap: wrap;
     }
-} 
+}
+
+/* Added by Dei */
+.item-details .purchase-type {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}

@@ -34,8 +34,8 @@ function loadOrders() {
 
 // Filter orders by status
 function filterOrders(status) {
-    const filteredOrders = status === 'all' 
-        ? orders 
+    const filteredOrders = status === 'all'
+        ? orders
         : orders.filter(order => order.status === status);
     renderOrders(filteredOrders);
 }
@@ -125,19 +125,15 @@ function viewOrderDetails(orderId) {
             `).join('')}
         </div>
         <div class="order-summary">
-            <div class="summary-item">
-                <span>Subtotal</span>
-                <span>${formatCurrency(order.total - 10)}</span>
-            </div>
-            <div class="summary-item">
-                <span>Shipping</span>
-                <span>${formatCurrency(10)}</span>
-            </div>
-            <div class="summary-item total">
-                <span>Total</span>
-                <span>${formatCurrency(order.total)}</span>
-            </div>
-        </div>
+    <div class="summary-item">
+        <span>Subtotal</span>
+        <span>${formatCurrency(order.total)}</span>
+    </div>
+    <div class="summary-item total">
+        <span>Total</span>
+        <span>${formatCurrency(order.total)}</span>
+    </div>
+</div>
     `;
 
     modal.style.display = 'block';
