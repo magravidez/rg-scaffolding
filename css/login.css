@@ -92,7 +92,7 @@
 
 .form-group textarea {
     min-height: 100px;
-    resize: vertical;
+    resize: none;
 }
 
 .form-group.error input,
@@ -143,9 +143,10 @@
 /* Notification */
 .notification {
     position: fixed;
-    top: 20px;
+    bottom: 20px;
     right: 20px;
-    padding: 1rem 2rem;
+    padding: 1rem 1.5rem;
+    max-width: 300px;
     border-radius: 5px;
     color: #fff;
     font-weight: 500;
