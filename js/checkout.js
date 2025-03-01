@@ -129,12 +129,14 @@ function validateCheckoutForm() {
 
 // Generate order ID
 function generateOrderId() {
-    const date = new Date();
-    const formattedDate = date.toISOString().slice(0, 10).replace(/-/g, '');
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const formattedDate = `${year}${month}${day}`;
     
     let orderCounter = localStorage.getItem('orderCounter_' + formattedDate);
     orderCounter = orderCounter ? parseInt(orderCounter, 10) + 1 : 1;
-    
     localStorage.setItem('orderCounter_' + formattedDate, orderCounter);
     
     const sequence = String(orderCounter).padStart(4, '0');
@@ -148,6 +150,16 @@ async function handlePlaceOrder(event) {
     if (!validateCheckoutForm()) {
         showNotification('Please fill in all required fields correctly', 'error');
         return;
+    }
+
+    if (user) {
+        user.name = document.getElementById('name').value;
+        user.email = document.getElementById('email').value;
+        user.phone = document.getElementById('phone').value;
+        user.address = document.getElementById('address').value;
+        user.city = document.getElementById('city').value;
+        user.postal = document.getElementById('postal').value;
+        localStorage.setItem('user', JSON.stringify(user));
     }
 
     const orderData = {
@@ -168,7 +180,7 @@ async function handlePlaceOrder(event) {
     };
 
     try {
-        // Save order to localStorage (in a real app, this would be an API call)
+        // Save order to localStorage
         let orders = JSON.parse(localStorage.getItem('orders') || '[]');
         orders.push(orderData);
         localStorage.setItem('orders', JSON.stringify(orders));
@@ -178,7 +190,7 @@ async function handlePlaceOrder(event) {
         updateCartCount();
 
         // Show success message
-        showNotification('Order placed successfully! Redirecting to orders page...');
+        showNotification('Order placed successfully! Redirecting to orders page...', 'success');
 
         // Redirect to orders page after a delay
         setTimeout(() => {
