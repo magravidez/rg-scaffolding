@@ -124,4 +124,4 @@ document.addEventListener('DOMContentLoaded', () => {
     if (productGallery) {
         loadProductGallery(productGallery);
     }
-}); 
+});

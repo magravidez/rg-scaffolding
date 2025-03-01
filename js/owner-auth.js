@@ -1,7 +1,6 @@
 async function simulateOwnerLogin(email, password) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            // Demo check: replace with real authentication logic
             if (email === 'rgscaffolding@gmail.com' && password === 'rgscaffolding') {
                 resolve({
                     token: 'owner_token',
@@ -32,12 +31,12 @@ async function handleOwnerLogin(event) {
     loginBtn.disabled = true;
     loginBtn.textContent = 'Signing In...';
 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
 
     try {
         const response = await simulateOwnerLogin(email, password);
-        sessionStorage.setItem('token', response.token);
+        localStorage.setItem('token', response.token);
         localStorage.setItem('user', JSON.stringify(response.user));
         window.location.href = 'owner-dashboard.html';
     } catch (error) {
@@ -103,4 +102,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-}); 
+});
