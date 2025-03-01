@@ -172,4 +172,4 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
-}); 
+});
