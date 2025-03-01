@@ -128,18 +128,17 @@ function validateCheckoutForm() {
 }
 
 // Generate order ID
-let orderCounter = 1;
-
 function generateOrderId() {
-  const date = new Date();
-
-  const formattedDate = date.toISOString().slice(0, 10).replace(/-/g, '');
-
-  const sequence = String(orderCounter).padStart(4, '0');
-
-  orderCounter++;
-
-  return `${formattedDate}-${sequence}`;
+    const date = new Date();
+    const formattedDate = date.toISOString().slice(0, 10).replace(/-/g, '');
+    
+    let orderCounter = localStorage.getItem('orderCounter_' + formattedDate);
+    orderCounter = orderCounter ? parseInt(orderCounter, 10) + 1 : 1;
+    
+    localStorage.setItem('orderCounter_' + formattedDate, orderCounter);
+    
+    const sequence = String(orderCounter).padStart(4, '0');
+    return `${formattedDate}-${sequence}`;
 }
 
 // Handle place order

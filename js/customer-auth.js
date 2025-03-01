@@ -18,75 +18,100 @@ function switchTab(tab) {
     }
 }
 
+async function simulateLogin(email, password) {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                token: 'dummy_token',
+                user: {
+                    id: 1,
+                    name: 'Juan Dela Cruz',
+                    email: email,
+                    role: 'customer'
+                }
+            });
+        }, 1000);
+    });
+}
+
 // Handle login form submission
 async function handleLogin(event) {
     event.preventDefault();
 
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
+    if (!validateForm('loginForm')) {
+        showNotification('Please fill in all fields correctly', 'error');
+        return;
+    }
+
+    const loginBtn = event.target.querySelector('.login-button');
+    loginBtn.disabled = true;
+    loginBtn.textContent = 'Signing In...';
+
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
 
     try {
-        // This would be replaced with actual API call
-        // For demo, we'll simulate a successful login
-        const response = {
-            token: 'dummy_token',
-            user: {
-                id: 1,
-                name: 'Juan Dela Cruz',
-                email: email,
-                role: 'customer'
-            }
-        };
-
-        // Store auth data
+        const response = await simulateLogin(email, password);
+        sessionStorage.setItem('token', response.token);
         localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
-
-        // Redirect to shop page
         window.location.href = 'shop.html';
     } catch (error) {
         handleError(error);
+    } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Sign In';
     }
+}
+
+async function simulateSignup(userData) {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                token: 'dummy_token',
+                user: {
+                    id: 1,
+                    ...userData,
+                    role: 'customer'
+                }
+            });
+        }, 1000);
+    });
 }
 
 // Handle signup form submission
 async function handleSignup(event) {
     event.preventDefault();
 
-    const name = document.getElementById('signupName').value;
-    const email = document.getElementById('signupEmail').value;
-    const password = document.getElementById('signupPassword').value;
-    const phone = document.getElementById('signupPhone').value;
-    const address = document.getElementById('signupAddress').value;
+    if (!validateForm('signupForm')) {
+        showNotification('Please fill in all fields correctly', 'error');
+        return;
+    }
+
+    const signupBtn = event.target.querySelector('.login-button');
+    signupBtn.disabled = true;
+    signupBtn.textContent = 'Creating Account...';
+
+    const name = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
+    const password = document.getElementById('signupPassword').value.trim();
+    const phone = document.getElementById('signupPhone').value.trim();
+    const address = document.getElementById('signupAddress').value.trim();
+
+    const userData = { name, email, password, phone, address };
 
     try {
-        // This would be replaced with actual API call
-        // For demo, we'll simulate a successful registration
-        const response = {
-            token: 'dummy_token',
-            user: {
-                id: 1,
-                name: name,
-                email: email,
-                phone: phone,
-                address: address,
-                role: 'customer'
-            }
-        };
-
-        // Store auth data
+        const response = await simulateSignup(userData);
+        sessionStorage.setItem('token', response.token);
         localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
-
-        // Show success message
-        showNotification('Registration successful! Redirecting to shop...');
-
-        // Redirect to shop page after a short delay
+        showNotification('Registration successful! Redirecting to shop...', 'success');
         setTimeout(() => {
             window.location.href = 'shop.html';
         }, 1500);
     } catch (error) {
         handleError(error);
+    } finally {
+        signupBtn.disabled = false;
+        signupBtn.textContent = 'Create Account';
     }
 }
 
@@ -134,7 +159,6 @@ function validatePhone(phone) {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    // Add input validation on blur
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {
         const inputs = form.querySelectorAll('input[required]');

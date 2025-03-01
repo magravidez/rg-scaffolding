@@ -1,35 +1,50 @@
+async function simulateOwnerLogin(email, password) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            // Demo check: replace with real authentication logic
+            if (email === 'rgscaffolding@gmail.com' && password === 'rgscaffolding') {
+                resolve({
+                    token: 'owner_token',
+                    user: {
+                        id: 1,
+                        name: 'Romel Gravidez',
+                        email: email,
+                        role: 'owner'
+                    }
+                });
+            } else {
+                reject(new Error('Invalid email or password'));
+            }
+        }, 1000);
+    });
+}
+
 // Handle owner login
-async function validateOwnerLogin(event) {
+async function handleOwnerLogin(event) {
     event.preventDefault();
+
+    if (!validateForm()) {
+        showNotification('Please fill in all fields correctly', 'error');
+        return;
+    }
+
+    const loginBtn = event.target.querySelector('.login-button');
+    loginBtn.disabled = true;
+    loginBtn.textContent = 'Signing In...';
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
     try {
-        // This would be replaced with actual API call
-        // For demo, we'll check for a specific owner account
-        if (email === 'rgscaffolding@gmail.com' && password === 'rgscaffolding') {
-            const response = {
-                token: 'owner_token',
-                user: {
-                    id: 1,
-                    name: 'Romel Gravidez',
-                    email: email,
-                    role: 'owner'
-                }
-            };
-
-            // Store auth data
-            localStorage.setItem('token', response.token);
-            localStorage.setItem('user', JSON.stringify(response.user));
-
-            // Redirect to owner dashboard
-            window.location.href = 'owner-dashboard.html';
-        } else {
-            showNotification('Invalid email or password', 'error');
-        }
+        const response = await simulateOwnerLogin(email, password);
+        sessionStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        window.location.href = 'owner-dashboard.html';
     } catch (error) {
-        handleError(error);
+        showNotification(error.message, 'error');
+    } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Sign In';
     }
 }
 
@@ -58,6 +73,11 @@ function validateForm() {
     return isValid;
 }
 
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('ownerLoginForm');
@@ -69,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showNotification('Please fill in all fields correctly', 'error');
             return;
         }
-        validateOwnerLogin(e);
+        handleOwnerLogin(e);
     });
 
     // Add input validation on blur
