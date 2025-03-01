@@ -40,12 +40,14 @@ function loadCheckout() {
     }
 }
 
-// Prefill user data
+// Prefill user data kung meron na
 function prefillUserData() {
     document.getElementById('name').value = user.name || '';
     document.getElementById('email').value = user.email || '';
     document.getElementById('phone').value = user.phone || '';
     document.getElementById('address').value = user.address || '';
+    document.getElementById('city').value = user.city || '';
+    document.getElementById('postal').value = user.postal || '';
 }
 
 // Render order items
@@ -127,18 +129,18 @@ function validateCheckoutForm() {
     return isValid;
 }
 
-// Generate order ID
+// Generate order ID gamit ang local date
 function generateOrderId() {
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
     const formattedDate = `${year}${month}${day}`;
-    
+
     let orderCounter = localStorage.getItem('orderCounter_' + formattedDate);
     orderCounter = orderCounter ? parseInt(orderCounter, 10) + 1 : 1;
     localStorage.setItem('orderCounter_' + formattedDate, orderCounter);
-    
+
     const sequence = String(orderCounter).padStart(4, '0');
     return `${formattedDate}-${sequence}`;
 }
@@ -152,15 +154,24 @@ async function handlePlaceOrder(event) {
         return;
     }
 
-    if (user) {
+    if (!user) {
+        user = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            address: document.getElementById('address').value,
+            city: document.getElementById('city').value,
+            postal: document.getElementById('postal').value
+        };
+    } else {
         user.name = document.getElementById('name').value;
         user.email = document.getElementById('email').value;
         user.phone = document.getElementById('phone').value;
         user.address = document.getElementById('address').value;
         user.city = document.getElementById('city').value;
         user.postal = document.getElementById('postal').value;
-        localStorage.setItem('user', JSON.stringify(user));
     }
+    localStorage.setItem('user', JSON.stringify(user));
 
     const orderData = {
         id: generateOrderId(),
